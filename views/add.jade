@@ -1,0 +1,13 @@
+// Jade
+  
+h2 Add
+form(name='form-add', method='Post', action='/business/add').form
+    label Day
+    input(name='day', type='date', id='day')
+    label Type
+    select(name='type', id='type')
+        option(value='income') Income
+        option(value='expense') Expense
+    label Value
+    input(name='value', type='numeric', id='value')
+    button(name="submit", type="submit", id="submit") Add

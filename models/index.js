@@ -4,12 +4,13 @@ function models(params) {
     var Schema = mongoose.Schema,
     ObjectId = mongoose.Schema.ObjectId;
 
-    var Business = new Schema({
-        name: { type: String, required: true }
-        , description: String
+    var Transaction = new Schema({
+        day: { type: Date, 'default': Date.now }
+        , type: String
+        , value: { type: Number, 'default': 0}
     });
 
-    mongoose.model('Business', Business);
+    mongoose.model('Business', Transaction);
 };
 
 module.exports = models;

@@ -6,4 +6,5 @@ exports.setup = function (params) {
     app.get('/', controllers.index);
     //app.get('/users', user.list);
     app.get('/business', controllers.business);
+    app.post('/business/add', controllers.add);
 };

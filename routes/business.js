@@ -3,7 +3,7 @@
  * GET business page.
  */
 
-exports.business = function(req, res){
+//exports.business = function(req, res){
 
-  res.render('business', { title: 'Business' });
-};
+  //res.render('business', { title: 'Business' });
+//};

@@ -11,8 +11,27 @@ function controllers(params){
             res.render('business', {
                 page: 'business',
                 title: 'Business',
-                business:business
+                business: business
             });
+        });
+    };
+
+    controllers.add = function (req, res) {
+        var form = req.body;
+        var transaction = new Business({
+            day: form.day || Date.Now,
+            type: form.type,
+            value: form.value
+        });
+
+        transaction.save(function (err) {
+            if (err) {
+                // update graph, table and summary
+                res.redirect(500, "..");
+            }
+            else {
+                res.redirect("..");
+            }
         });
     };
 

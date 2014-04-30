@@ -21,10 +21,13 @@ var models = require('./models') ({ mongoose: mongoose })
      
 var app = module.exports = express();
 
+app.locals.moment = require('./public/javascripts/moment.min');
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('viewoptions', { layout: false})
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());

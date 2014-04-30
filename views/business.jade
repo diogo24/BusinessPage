@@ -1,14 +1,31 @@
 // Jade
-
-h1 = title
+extends layout
 
 block content
+    div#content
+        h2= title
 
-div(id="graph")
-    h1 Graph
+        div(id="graph")
+            h1 Graph
 
-div(id="table")
-    h1 Table
+        div(id="table")
+            h1 Table
 
-div(id="summary")
-    h1 Summary
+        div(id="summary")
+            h1 Summary
+
+        div(id="add")
+            include add
+
+        div(id="list")
+            table
+                tr
+                    th Date
+                    th Type
+                    th Value
+                for transaction in business
+                    tr
+                        td= moment(transaction.day).format('DD/MM/YYYY')
+                        td= transaction.type
+                        td= transaction.value
+            
