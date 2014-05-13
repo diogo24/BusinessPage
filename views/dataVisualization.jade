@@ -1,0 +1,101 @@
+// Jade
+div(id="chart")
+    h1 Chart
+
+div(id="table")
+    h1 Table
+
+div(id="summary")
+    h1 Summary
+
+script(src="/javascripts/moment.min.js")
+script(src="/javascripts/underscore.js")
+script(type='text/javascript')
+    var businessTable = [];  
+    var business = !{JSON.stringify(business)};
+    //businessTable[0] = ['Date', 'Expense', 'Value'];
+    for(var i = 0; i < business.length;i++) {
+        var transaction = business[i];
+        if(transaction.day && transaction.value){
+            //businessTable.push([moment(transaction.day).format('DD/MM/YYYY'), transaction.type, transaction.value]);
+            var date = moment(transaction.day);
+            businessTable.push([new Date(date.year(), date.month(), date.date()), transaction.type, transaction.value]);
+        }
+    }
+
+    function GetSummary(table) {
+        var summaryIncome = 0;
+        var summaryExpense= 0;
+        var summaryProfit = 0;
+        var result = [];
+
+        for(var i = 1; i < table.length; i++)
+        {
+            var value = table[i];
+            summaryProfit += value[1];// Profit column
+            summaryIncome += value[2];// Income column
+            summaryExpense += value[3]; // Expense column
+        }
+        result.push([summaryProfit, summaryIncome, summaryExpense]);
+        return result;
+    };
+
+    function GetTable(businessTable) {
+        businessTable.sort(function(a, b){ 
+            //var ad = moment(a[0], 'DD/MM/YYYY');
+            //var bd = moment(b[0], 'DD/MM/YYYY');
+            //return ad.diff(bd);
+
+            return a[0].getTime() - b[0].getTime();
+        });
+
+        var groupTable = _.groupBy(businessTable, function(transaction){ 
+            //return moment(transaction[0], 'DD/MM/YYYY').unix(); 
+            return transaction[0].getTime();
+        });
+
+        var summaryTable = [];
+        for(var key in groupTable) {
+            var income = 0;
+            var expense = 0;
+            var date = {};
+            var values = groupTable[key];
+            for (var i = 0; i < values.length; i++){
+                var transaction = values[i];
+                date = transaction[0];
+                if(transaction[1] === "income") {
+                    income = income + transaction[2];
+                } 
+                if(transaction[1] === "expense") {
+                    expense = expense + transaction[2];
+                }                    
+            }
+
+            summaryTable.push([date, income - expense, income, expense]);
+        }
+        return summaryTable;
+    };
+    
+    var t = GetTable(businessTable);
+    var summary = GetSummary(t);
+
+    summary.unshift(['Profit', 'Income', 'Expense']);
+    t.unshift(['Date', 'Profit', 'Income', 'Expense']);
+
+    function drawVisualization() {
+        var dataTable = google.visualization.arrayToDataTable(t);
+        var summaryData = google.visualization.arrayToDataTable(summary);
+      
+        var table = new google.visualization.Table(document.getElementById('table'));
+        table.draw(dataTable, {width: 600, height: 300});
+
+        var summaryTable = new google.visualization.Table(document.getElementById('summary'));
+        summaryTable.draw(summaryData, {width: 300, height: 50});
+      
+        var dataView = new google.visualization.DataView(dataTable);
+        dataView.setColumns([0, 1 , 2, 3]);
+      
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
+        chart.draw(dataView, {width: 600, height: 300});
+      };
+    google.load('visualization', '1', {packages: ['table', 'columnchart'], "callback": drawVisualization });

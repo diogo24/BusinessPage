@@ -19,9 +19,10 @@ function controllers(params){
     controllers.add = function (req, res) {
         var form = req.body;
         var transaction = new Business({
-            day: form.day || Date.Now,
+            day: form.day,
             type: form.type,
-            value: form.value
+            value: form.value,
+            description: form.description
         });
 
         transaction.save(function (err) {

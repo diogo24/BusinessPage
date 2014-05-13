@@ -5,9 +5,10 @@ function models(params) {
     ObjectId = mongoose.Schema.ObjectId;
 
     var Transaction = new Schema({
-        day: { type: Date, 'default': Date.now }
+        day: { type: Date }
         , type: String
-        , value: { type: Number, 'default': 0}
+        , value: { type: Number}
+        , description: String
     });
 
     mongoose.model('Business', Transaction);
